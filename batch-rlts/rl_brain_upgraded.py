@@ -1,13 +1,12 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow.python import pywrap_tensorflow
-#2.0之后就不用了
-tf.reset_default_graph()
+tf.compat.v1.reset_default_graph()
 #import numba as nb
 
 #for reproducible
 np.random.seed(1)
-tf.set_random_seed(1)
+tf.compat.v1.set_random_seed(1)
 
 class PolicyGradient:
     def __init__(self, n_features, n_actions, learning_rate=0.001, reward_decay=0.99, output_graph=False):
@@ -17,28 +16,28 @@ class PolicyGradient:
         self.gamma = reward_decay
         self.ep_obs, self.ep_as, self.ep_rs = [], [], []
         self._build_net()
-        self.sess = tf.Session()
+        self.sess = tf.compat.v1.Session()
         if output_graph:
             # $ tensorboard --logdir=logs
             # http://0.0.0.0:6006/
             # tf.train.SummaryWriter soon be deprecated, use following
-            tf.summary.FileWriter("logs/", self.sess.graph)
-        self.sess.run(tf.global_variables_initializer())
+            tf.compat.v1.summary.FileWriter("logs/", self.sess.graph)
+        self.sess.run(tf.compat.v1.global_variables_initializer())
 
     def _build_net(self):
-        with tf.name_scope('inputs'):
-            self.tf_obs = tf.placeholder(tf.float32, [None, self.n_features], name="observations")
-            self.tf_acts = tf.placeholder(tf.int32, [None, ], name="actions_num")
-            self.tf_vt = tf.placeholder(tf.float32, [None, ], name="actions_value")    
+        with tf.compat.v1.name_scope('inputs'):
+            self.tf_obs = tf.compat.v1.placeholder(tf.float32, [None, self.n_features], name="observations")
+            self.tf_acts = tf.compat.v1.placeholder(tf.int32, [None, ], name="actions_num")
+            self.tf_vt = tf.compat.v1.placeholder(tf.float32, [None, ], name="actions_value")    
         #fc1 'batch normalization if any'
-        layer = tf.layers.dense(
+        layer = tf.compat.v1.layers.dense(
             inputs=self.tf_obs,
-            units=20,
+            units=20, #try diff neurons for skipping setting (e.g., RLTS 20 in geolife, RLTS-Skip 5 in geolife)
             activation=tf.nn.tanh,  # tanh activation
             name='fc1'
         )
         #fc2
-        all_act = tf.layers.dense(
+        all_act = tf.compat.v1.layers.dense(
             inputs=layer,
             units=self.n_actions,
             activation=None,
@@ -46,12 +45,12 @@ class PolicyGradient:
         )
         self.all_act_prob = tf.nn.softmax(all_act, name='act_prob')  # use softmax to convert to probability
 
-        with tf.name_scope('loss'):
-            neg_log_prob = tf.reduce_sum(-tf.log(self.all_act_prob)*tf.one_hot(self.tf_acts, self.n_actions), axis=1)
+        with tf.compat.v1.name_scope('loss'):
+            neg_log_prob = tf.reduce_sum(-tf.math.log(self.all_act_prob)*tf.one_hot(self.tf_acts, self.n_actions), axis=1)
             loss = tf.reduce_mean(neg_log_prob * self.tf_vt)  # reward guided loss
 
-        with tf.name_scope('train'):
-            self.train_op = tf.train.AdamOptimizer(self.lr).minimize(loss)
+        with tf.compat.v1.name_scope('train'):
+            self.train_op = tf.compat.v1.train.AdamOptimizer(self.lr).minimize(loss)
 
     def pro_choose_action(self, observation): #select action w.r.t the actions prob
         prob_weights = self.sess.run(self.all_act_prob, feed_dict={self.tf_obs: observation})
@@ -98,11 +97,11 @@ class PolicyGradient:
         return discounted_ep_rs
     
     def save(self, checkpoint):
-        saver = tf.train.Saver()
+        saver = tf.compat.v1.train.Saver()
         saver.save(self.sess, checkpoint)
     
     def load(self, checkpoint):
-        saver = tf.train.Saver()
+        saver = tf.compat.v1.train.Saver()
         ckpt = tf.train.get_checkpoint_state(checkpoint)
         if ckpt and ckpt.model_checkpoint_path:
             print('training from last checkpoint', checkpoint)
@@ -136,12 +135,12 @@ class PolicyGradient:
         exp_nx = np.exp(-x)
         return (exp_x - exp_nx) / (exp_x + exp_nx)
     
-    def quick_time_action(self, observation): # matrix implementation for fast efficiency when the model is ready
+    def quick_time_action(self, observation): #matrix implementation for fast efficiency when the model is ready
         l1 = self.tanh(np.dot(observation, self.kernel_1) + self.bias_1)
         pro = self.softmax(np.dot(l1, self.kernel_2) + self.bias_2)
         #print('quick_time_action', pro)
-        #action = np.argmax(pro)  # select action w.r.t the actions prob
-        action = np.random.choice(range(self.n_actions), p=pro[0])
+        action = np.argmax(pro)  # select action w.r.t the actions max prob
+        #action = np.random.choice(range(self.n_actions), p=pro[0])
         return action
 
         

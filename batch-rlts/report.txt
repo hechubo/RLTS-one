@@ -1,0 +1,45 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 1 files
+Detected 1 issues that require attention
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+File: rl_brain.py
+--------------------------------------------------------------------------------
+rl_brain.py:101:8: WARNING: *.save requires manual check. (This warning is only applicable if the code saves a tf.Keras model) Keras model.save now saves to the Tensorflow SavedModel format by default, instead of HDF5. To continue saving to HDF5, add the argument save_format='h5' to the save() function.
+================================================================================
+Detailed log follows:
+
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'rl_brain.py'
+ outputting to 'rl_brain_upgraded.py'
+--------------------------------------------------------------------------------
+
+4:0: INFO: Renamed 'tf.reset_default_graph' to 'tf.compat.v1.reset_default_graph'
+9:0: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+19:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+24:12: INFO: tf.summary.FileWriter requires manual check. The TF 1.x summary API cannot be automatically migrated to TF 2.0, so symbols have been converted to tf.compat.v1.summary.* and must be migrated manually. Typical usage will only require changes to the summary writing logic, not to individual calls like scalar(). For examples of the new summary API, see the Effective TF 2.0 migration document or check the TF 2.0 TensorBoard tutorials.
+24:12: INFO: Renamed 'tf.summary.FileWriter' to 'tf.compat.v1.summary.FileWriter'
+25:22: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+28:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+28:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+29:26: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+30:27: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+31:25: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+33:16: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+40:18: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+48:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+48:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+49:42: INFO: Renamed 'tf.log' to 'tf.math.log'
+52:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+52:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+53:28: INFO: Renamed 'tf.train.AdamOptimizer' to 'tf.compat.v1.train.AdamOptimizer'
+100:16: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+101:8: WARNING: *.save requires manual check. (This warning is only applicable if the code saves a tf.Keras model) Keras model.save now saves to the Tensorflow SavedModel format by default, instead of HDF5. To continue saving to HDF5, add the argument save_format='h5' to the save() function.
+104:16: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+--------------------------------------------------------------------------------
+

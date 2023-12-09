@@ -1,7 +1,10 @@
 import os
 import random
 import time
-
+'''
+将原始的GPS轨迹数据转换为一个更简洁、更易于后续处理的格式。
+结果文件中的每一行包含一个经度、一个纬度和一个时间戳，这些数据均以空格分隔。
+'''
 root_path = r'./TrajData/Geolife Trajectories 1.3/Data/'
 out_path = r'./TrajData/Geolife_out/'
 file_list = []
@@ -16,7 +19,7 @@ def get_file_path(root_path,file_list,dir_list):
             get_file_path(dir_file_path,file_list,dir_list)
         else:
             file_list.append(dir_file_path)
- 
+
 
 get_file_path(root_path, file_list, dir_list)
 

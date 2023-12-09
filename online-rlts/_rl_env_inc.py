@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import math
 
 class TrajComp():
+    # 加载原始轨迹的数据
     def __init__(self, path, amount, a_size, s_size):
         self.n_actions = a_size
         self.n_features = s_size
@@ -17,6 +18,7 @@ class TrajComp():
         for num in range(amount):
             self.ori_traj_set.append(F.to_traj(path + str(num)))
 
+    # 在前向链表F_ward和后向链表B_ward中插入一个新点,并更新堆heap
     def read(self, p, episode, rem, flag):
         self.F_ward[self.link_tail] = [0.0, p]
         self.B_ward[p] = [0.0, self.link_tail]
@@ -55,7 +57,7 @@ class TrajComp():
         self.state = [self.heap[0][0], self.heap[0][0], self.heap[1][0]]
         #print('len, obs, heap and state', len(self.heap), self.observation, self.heap, self.state)
         return steps, np.array(self.state).reshape(1, -1)           
-        
+    # 奖励函数的定义，也是修改的关键，这里用的是sed
     def reward_update(self, episode, rem):
         if (rem not in self.start) and (rem not in self.end):
             #interval insert
@@ -213,8 +215,6 @@ class TrajComp():
             self.F_ward[NEXT_P][0] = F.sed_op([s,m1,m2,e])
             self.B_ward[NEXT_P][0] = F.sed_op([s,m1,m2,e])
             heapq.heappush(self.heap, (self.F_ward[NEXT_P][0], NEXT_P))
-            
-        #self.copy_traj.remove(self.ori_traj_set[episode][rem]) #for testing the correctness of inc rewards
         if  label == 'T':
             self.reward_update(episode, rem)
         
@@ -223,25 +223,10 @@ class TrajComp():
         self.delete_heap(self.heap, (self.F_ward[rem][0], rem))
         del self.F_ward[rem]
         del self.B_ward[rem]     
-        
-        #_,  self.current = F.sed_error(self.ori_traj_set[episode], self.copy_traj) #for testing the correctness of inc rewards
+
         rw = self.last_error - self.current
         self.last_error = self.current
-        #print('self.current',self.current)            
-            
-#        if not done: #boundary process
-#            if NEXT_P == self.link_tail:
-#                self.read(index + 1, episode, rem, True)
-#                self.check = [self.heap[0][1], LAST_P, LAST_P]
-#                self.state = [self.heap[0][0], self.F_ward[LAST_P][0], self.F_ward[LAST_P][0]]
-#            else:
-#                self.read(index + 1, episode, rem, False)
-#                if LAST_P == self.link_head:
-#                    self.check = [self.heap[0][1], NEXT_P, NEXT_P]
-#                    self.state = [self.heap[0][0], self.B_ward[NEXT_P][0], self.B_ward[NEXT_P][0]]
-#                else:
-#                    self.check = [self.heap[0][1], LAST_P, NEXT_P]
-#                    self.state = [self.heap[0][0], self.F_ward[LAST_P][0], self.B_ward[NEXT_P][0]]
+
         
         if not done: #boundary process
             if NEXT_P == self.link_tail:
