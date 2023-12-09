@@ -1,5 +1,5 @@
 from rl_env_inc_skip import TrajComp
-from rl_brain import PolicyGradient
+from rl_brain_upgraded import PolicyGradient
 import matplotlib.pyplot as plt
 import time
 
