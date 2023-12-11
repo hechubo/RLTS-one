@@ -107,7 +107,7 @@ class PolicyGradient:
         if ckpt and ckpt.model_checkpoint_path:
             print('training from last checkpoint', checkpoint)
             saver.restore(self.sess, ckpt.model_checkpoint_path)
-        reader = pywrap_tensorflow.NewCheckpointReader(checkpoint+'trained_model.ckpt')
+        reader = tf.compat.v1.train.NewCheckpointReader(checkpoint+'trained_model.ckpt')
         #Print tensor name and values
 #        var_to_shape_map = reader.get_variable_to_shape_map()
 #        for key in var_to_shape_map:
