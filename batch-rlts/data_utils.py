@@ -2,8 +2,9 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-
+#
 def lonlat2meters(lon, lat):
+    # 将经纬度转化为米制（椭球面积公式）
     semimajoraxis = 6378137.0
     east = lon * 0.017453292519943295
     north = lat * 0.017453292519943295
@@ -11,6 +12,7 @@ def lonlat2meters(lon, lat):
     return semimajoraxis * east, 3189068.5 * math.log((1 + t) / (1 - t))
 
 def points2meter(points):
+    # 将包含经纬度和时间的点序列，转换为包含平面直角坐标系（米）和时间的序列
     rtn = []
     for p in points:
         lon_meter, lat_meter = lonlat2meters(lon=p[1], lat=p[0])
@@ -18,6 +20,7 @@ def points2meter(points):
     return rtn
 
 def to_traj(file):
+    # 从文件中读取traj数据，转化为点序列的列表形式
     traj = []
     f = open(file)
     for line in f:
@@ -33,8 +36,8 @@ def sed_op(segment):
         #print('segment error', 0.0)
         return 0.0
     else:
-        #print('segment', segment)
         ps = segment[0]
+        # 首先把整个轨迹读进来
         pe = segment[-1]
         e = 0.0
         for i in range(1,len(segment)-1):
@@ -42,6 +45,7 @@ def sed_op(segment):
             time_ratio = 1 if (pe[2]- ps[2]) == 0  else (syn_time-ps[2]) / (pe[2]-ps[2])
             syn_x = ps[0] + (pe[0] - ps[0]) * time_ratio
             syn_y = ps[1] + (pe[1] - ps[1]) * time_ratio
+            # L2范数，欧几里得距离
             e = max(e, np.linalg.norm(np.array([segment[i][0],segment[i][1]]) - np.array([syn_x,syn_y])))
         #print('segment error', e)
         return e
