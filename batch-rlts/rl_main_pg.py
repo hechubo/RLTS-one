@@ -10,8 +10,8 @@ def run_online(elist): # Validation
         #print('online episode', episode)
         total_len.append(len(env.ori_traj_set[episode]))
         buffer_size = int(ratio*len(env.ori_traj_set[episode]))
-        if buffer_size < 3:
-            continue
+        # if buffer_size < 3:
+        #     continue
         steps, observation = env.reset(episode, buffer_size)
         for index in range(buffer_size, steps):
             if index == steps - 1:
@@ -36,8 +36,8 @@ def run_comp(): #Training
             #print('training', episode)
             buffer_size = int(ratio*len(env.ori_traj_set[episode]))
             # extreme cases
-            if buffer_size < 3:
-                continue
+            # if buffer_size < 3:
+            #     continue
             steps, observation = env.reset(episode, buffer_size)
             for index in range(buffer_size, steps):
                 #print('index', index)
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     ratio = 0.1
     env = TrajComp(traj_path, traj_amount + valid_amount, a_size, s_size)
     RL = PolicyGradient(env.n_features, env.n_actions)
-    #RL.load('./save/your_model/')
+    # RL.load('./save/0.00048138837096097745_ratio_0.1/')
     start = time.time()
     training, validation = run_comp()
     print("Training elapsed time = %s", float(time.time() - start))

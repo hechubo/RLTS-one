@@ -270,7 +270,7 @@ class TrajComp():
             #for visualization, 'sed' is by default, if you want to draw other errors by revising the codes in data_utils.py correspondingly.
             F.draw(self.ori_traj_set[episode], sim_traj) 
 
-            return final_error
+            return final_error,sim_traj
         if label == 'V':
             start = 0
             sim_traj = []
@@ -279,8 +279,9 @@ class TrajComp():
                 start = self.F_ward[start][1]
                 # print(sim_traj)
             sim_traj.append(self.ori_traj_set[episode][start])
+            # print(sim_traj)
             _, final_error = F.speed_error(self.ori_traj_set[episode], sim_traj)
-            return final_error
+            return final_error,sim_traj
         if label == 'T':
             print('Training at episode {} with error {}'.format(episode, self.current))
             return self.current

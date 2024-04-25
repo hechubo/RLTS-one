@@ -77,10 +77,11 @@ def run_comp(): #Training
 
 if __name__ == "__main__":
     # building subtrajectory env
-    traj_path = '../TrajData/Geolife_out_1/'
+    traj_path = '../TrajData/routes_clean_alt/'
+    # traj_path = '../TrajData/Geolife_out_2/'
     traj_amount = 1000
     valid_amount = 100
-    a_size = 2
+    a_size = 3
     s_size = 3
     ratio = 0.1
     env = TrajComp(traj_path, traj_amount + valid_amount, a_size, s_size)

@@ -24,7 +24,7 @@ class TrajComp():
         s = self.B_ward[self.link_tail][1]
         m = self.link_tail
         e = self.F_ward[self.link_tail][1]
-        self.err_record[(s, e)] = F.sed_op(self.ori_traj_set[episode][s: e + 1])
+        self.err_record[(s, e)] = F.speed_op(self.ori_traj_set[episode][s: e + 1])
         self.F_ward[m][0] = self.err_record[(s, e)]
         self.B_ward[m][0] = self.err_record[(s, e)]
         #heapq.heappush(self.heap, (self.F_ward[m][0], m))# save (state_value, point index of ori traj)
@@ -54,6 +54,7 @@ class TrajComp():
             self.read(i, episode)
         #t = heapq.nsmallest(self.n_features, self.heap)
         t = self.sortedlist[:self.n_features]
+        print(t)
         if len(t) < self.n_features:
             self.check = [t[0][1],t[0][1],t[1][1]]
             self.state = [t[0][0],t[0][0],t[1][0]]
@@ -270,12 +271,19 @@ class TrajComp():
             sim_traj = []
             while start in self.F_ward:
                 sim_traj.append(self.ori_traj_set[episode][start])
+                # print(sim_traj)
                 start = self.F_ward[start][1]
             sim_traj.append(self.ori_traj_set[episode][start])
-            _, final_error = F.sed_error(self.ori_traj_set[episode], sim_traj)
+            # print(sim_traj)
+            # with open(file_path, 'w') as file:
+            # for point in sim_traj:
+            #     # Assuming each point is a tuple or list in the format (x, y)
+            #     file.write(f"{point[0]},{point[1]}\n")
+            _, final_error = F.speed_error(self.ori_traj_set[episode], sim_traj)
             print('Validation at episode {} with error {}'.format(episode, final_error))
             #for visualization, 'sed' is by default, if you want to draw other errors by revising the codes in data_utils.py correspondingly.
             F.draw(self.ori_traj_set[episode], sim_traj) 
+
             return final_error
         if label == 'V':
             start = 0
@@ -283,8 +291,9 @@ class TrajComp():
             while start in self.F_ward:
                 sim_traj.append(self.ori_traj_set[episode][start])
                 start = self.F_ward[start][1]
+                # print(sim_traj)
             sim_traj.append(self.ori_traj_set[episode][start])
-            _, final_error = F.sed_error(self.ori_traj_set[episode], sim_traj)
+            _, final_error = F.speed_error(self.ori_traj_set[episode], sim_traj)
             return final_error
         if label == 'T':
             print('Training at episode {} with error {}'.format(episode, self.current))

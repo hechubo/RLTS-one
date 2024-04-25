@@ -7,6 +7,8 @@ import time
 '''
 root_path = r'./TrajData/Geolife Trajectories 1.3/Data/'
 out_path = r'./TrajData/Geolife_out/'
+out_path_1 = r'./TrajData/Geolife_out_1/'
+out_path_2 = r'./TrajData/Geolife_out_2/'
 file_list = []
 dir_list = []
 

@@ -52,14 +52,14 @@ def evaluate_skip(elist):
 
 if __name__ == "__main__":
     # building subtrajectory env
-    traj_path = '../TrajData/Geolife_out/'
+    traj_path = '../TrajData/Geolife_out_1/'
     test_amount = 1000
-    elist = [i for i in range(1100, 1100 + test_amount - 1)]
+    elist = [i for i in range(1000, 1000 + test_amount - 1)]
     a_size = 3 #RLTS 3, RLTS-Skip 5
     s_size = 3 #RLTS 3, RLTS-Skip 5
     ratio = 0.1
-    env = TrajComp(traj_path, 3000, a_size, s_size)
+    env = TrajComp(traj_path, 2000, a_size, s_size)
     RL = PolicyGradient(env.n_features, env.n_actions)
-    RL.load('./save/your_trained_model/') #your_trained_model your_trained_model_skip
+    RL.load('./x_model/0.00010469433824260443_ratio_0.1_x/') #your_trained_model your_trained_model_skip
     effectiveness = evaluate(elist) #evaluate evaluate_skip
     print("%e" %effectiveness)
