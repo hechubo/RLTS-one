@@ -59,4 +59,23 @@ Similarly, you can set a skipping step `skip_size` to train the RLTS-Skip model,
 
 ### Interpolation
 
-We provide three copies of the interpolation function code, corresponding to 2D-3D and N-dimensional, and the inputs and outputs are commented in the code
+Interpolation can be done directly with n-dimension code, supporting 2-n dimensional data
+Code stored in RLTS-one/interpolation/N_dimension.py
+
+1. Input format: n tracks in txt format, each one is in the form of [timestamp longitude/latitude/other information].
+
+2. How to execute the code: directly input the name of the input file.
+
+3. Output format: output the interpolated trajectory routes, the code will be automatically saved to a txt file.
+
+
+### How to use the data process python code
+
+preprocess_muti.py preprocess_muti.py is to cut Geolife's trajectory data into single dimensions for use by RLTS
+
+mopsi_preprocess.py is to cut the mopsi trajectory data (3D) into single dimensions for use by RLTS
+
+compressRate.py measures the error between the compressed trajectory data and the original trajectory.The usage is commented in the source code.
+
+process_height.py is to deal with the mopsi dataset, the height of the data all 0 cases, such data into the RLTS will be overflow, and not good to modify, so directly through this to remove
+
