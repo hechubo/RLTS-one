@@ -32,7 +32,7 @@ There are several hyperparameters in [`rl_brain_upgraded.py`](./online-rlts/rl_b
 Run [`rl_main_pg_one.py`] the generated models will be stored in the folder `./save` automatically, and you can pick one model with the best performance on the validation data as your model from them.
 
 ```
-python rl_main_pg.py
+python rl_main_pg_one.py
 ```
 Here, we provide an interface [`RL.load(checkpoint)`](./online-rlts/rl_brain.py), and you can load an intermediate model to continue the training from the checkpoint, which saves your efforts caused by some unexpected exceptions and no need to train again.
 In addition, we implemented an incremental computation for reward update in [`rl_env_inc_one.py`], which offers a very fast efficiency for the training, and you may refer the figure [`inc.png`] to get more details.
