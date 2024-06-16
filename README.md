@@ -79,3 +79,8 @@ compressRate.py measures the error between the compressed trajectory data and th
 
 process_height.py is to deal with the mopsi dataset, the height of the data all 0 cases, such data into the RLTS will be overflow, and not good to modify, so directly through this to remove
 
+How to process the data into the desired format
+
+First of all we need to modify the multidimensional data into unidimensional data, that preprocess_muti.py is outputting geolife's (longitude, latitude, timestamp) format into (longitude, timestamp), (latitude, timestamp), similarly the file mopsi_preprocess.py is dealing with the mopsi dataset, but there is a problem that The mopsi data in the dimension of height will appear to keep a data (0) for a long time or permanently unchanged, process_height.py is used to eliminate these data, note that this process_height.py file needs to be run before mopsi_preprocess.py.
+
+
