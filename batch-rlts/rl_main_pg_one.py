@@ -22,7 +22,8 @@ def run_online(elist): # Validation
             #action = RL.quick_time_action(observation) #use it when your model is ready for efficiency
             observation_, _ = env.step(episode, action, index, done, 'V') #'T' means Training, and 'V' means Validation
             observation = observation_
-        eva.append(env.output(episode, 'V')) #'T' means Training, 'V' means Validation, and 'V-VIS' for visualization on Validation
+        env_out_put_err,_=env.output(episode, 'V')
+        eva.append(env_out_put_err) #'T' means Training, 'V' means Validation, and 'V-VIS' for visualization on Validation
     return eva
         
 def run_comp(): #Training
@@ -77,7 +78,7 @@ def run_comp(): #Training
 
 if __name__ == "__main__":
     # building subtrajectory env
-    traj_path = '../TrajData/routes_clean_alt/'
+    traj_path = '/root/geo/Geolife_out_1/'
     # traj_path = '../TrajData/Geolife_out_2/'
     traj_amount = 1000
     valid_amount = 100
