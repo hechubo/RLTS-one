@@ -1,4 +1,4 @@
-from rl_env_inc import TrajComp
+from rl_env_inc_one import TrajComp
 #from rl_env_inc_skip import TrajComp
 from rl_brain_upgraded import PolicyGradient
 import matplotlib.pyplot as plt
@@ -19,7 +19,8 @@ def evaluate(elist): # Evaluation
             action = RL.quick_time_action(observation) #matrix implementation for fast efficiency when the model is ready
             observation_, _ = env.step(episode, action, index, done, 'V') #'T' means Training, and 'V' means Validation
             observation = observation_
-        effectiveness.append(env.output(episode, 'V')) #'T' means Training, 'V' means Validation, and 'V-VIS' for visualization on Validation
+        env_output_error , _ =env.output(episode, 'V')
+        effectiveness.append(env_output_error) #'T' means Training, 'V' means Validation, and 'V-VIS' for visualization on Validation
     return sum(effectiveness)/len(effectiveness)
 
 def evaluate_skip(elist):
@@ -47,12 +48,13 @@ def evaluate_skip(elist):
             action = RL.quick_time_action(observation) #matrix implementation for fast efficiency when the model is ready
             observation_, _ = env.step(episode, action, index, done, 'V') #'T' means Training, and 'V' means Validation
             observation = observation_
-        effectiveness.append(env.output(episode, 'V')) #'T' means Training, 'V' means Validation, and 'V-VIS' for visualization on Validation
+        env_output_error,_=env.output(episode, 'V')
+        effectiveness.append(env_output_error) #'T' means Training, 'V' means Validation, and 'V-VIS' for visualization on Validation
     return sum(effectiveness)/len(effectiveness)
 
 if __name__ == "__main__":
     # building subtrajectory env
-    traj_path = '../TrajData/Geolife_out_1/'
+    traj_path = '/root/geo/Geolife_out_1/'
     test_amount = 1000
     elist = [i for i in range(1000, 1000 + test_amount - 1)]
     a_size = 3 #RLTS 3, RLTS-Skip 5
@@ -60,6 +62,6 @@ if __name__ == "__main__":
     ratio = 0.1
     env = TrajComp(traj_path, 2000, a_size, s_size)
     RL = PolicyGradient(env.n_features, env.n_actions)
-    RL.load('./x_model/0.00010469433824260443_ratio_0.1_x/') #your_trained_model your_trained_model_skip
+    RL.load('/root/RLTS-one/batch-rlts/save/3.2949985227000175e-05_ratio_0.1/') #your_trained_model your_trained_model_skip
     effectiveness = evaluate(elist) #evaluate evaluate_skip
     print("%e" %effectiveness)

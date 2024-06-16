@@ -34,12 +34,12 @@ Run [`rl_main_pg_one.py`] the generated models will be stored in the folder `./s
 ```
 python rl_main_pg_one.py
 ```
-Here, we provide an interface [`RL.load(checkpoint)`](./online-rlts/rl_brain.py), and you can load an intermediate model to continue the training from the checkpoint, which saves your efforts caused by some unexpected exceptions and no need to train again.
+Here, we provide an interface [`RL.load(checkpoint)`](./online-rlts/rl_brain_one.py), and you can load an intermediate model to continue the training from the checkpoint, which saves your efforts caused by some unexpected exceptions and no need to train again.
 In addition, we implemented an incremental computation for reward update in [`rl_env_inc_one.py`], which offers a very fast efficiency for the training, and you may refer the figure [`inc.png`] to get more details.
 After your model is trained, we provide a fast interface called [`quick_time_action(observation)`], which replaces the function of DL tool and implements the NN forward more efficiently.
 
 ### Error Measurements
-We implemented four mainstream error measurements of trajectory simplification in [`data_utils_muti.py`], including SED [`sed_op`], [`sed_error`], PED [`ped_op`], [`ped_error`], DAD [`dad_op`], [`dad_error`], and SAD [`speed_op`], [`speed_error`], where '_op' denotes the error on an anchor segment, and "_error" denotes the error between the orignal trajectory and its simplified trajectory. More details can be found in the paper. The default error measurement is SED, if you want to test more measurements, just simply replace the corresponding function name in [`rl_env_inc_one.py`].
+We implemented four mainstream error measurements of trajectory simplification in [`data_utils_muti.py`], including SED [`sed_op`], [`sed_error`] and SAD [`speed_op`], [`speed_error`], where '_op' denotes the error on an anchor segment, and "_error" denotes the error between the orignal trajectory and its simplified trajectory. More details can be found in the paper. The default error measurement is SED, if you want to test more measurements, just simply replace the corresponding function name in [`rl_env_inc_one.py`].
 
 ### Visualization
 
@@ -83,4 +83,10 @@ How to process the data into the desired format
 
 First of all we need to modify the multidimensional data into unidimensional data, that preprocess_muti.py is outputting geolife's (longitude, latitude, timestamp) format into (longitude, timestamp), (latitude, timestamp), similarly the file mopsi_preprocess.py is dealing with the mopsi dataset, but there is a problem that The mopsi data in the dimension of height will appear to keep a data (0) for a long time or permanently unchanged, process_height.py is used to eliminate these data, note that this process_height.py file needs to be run before mopsi_preprocess.py.
 
+### important python file
 
+if you want to change the error measurement function,go to rl_env_inc_one.py
+
+if you want to evaluate the model,go to rl_evaluate.py.if the model is 1D model,change the env file,from rl_env_inc change to rl_env_inc_one
+
+if you want to get the sim_traj,you can find that ,in rl_env_inc_one，I've left an interface to return the simplified trajectory, which you can take out when you eval the model
